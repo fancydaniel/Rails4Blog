@@ -6,4 +6,7 @@ class ApplicationController < ActionController::Base
     def hello
      render text: "<h1>Hello</h1><p>Welcome home</p>"
     end
+
+    def index
+    end
 end
