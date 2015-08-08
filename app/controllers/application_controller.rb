@@ -35,7 +35,4 @@ class ApplicationController < ActionController::Base
     #  render text: "<h1>Hello</h1><p>Welcome home</p>"
     # end
 
-    def index
-    end
-
 end

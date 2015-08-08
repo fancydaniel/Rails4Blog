@@ -27,7 +27,7 @@ class ArticlesController < ApplicationController
   # POST /articles
   # POST /articles.json
   def create
-    @article = current_user.article.new(article_params)
+    @article = current_user.articles.new(article_params)
 
     respond_to do |format|
       if @article.save
@@ -51,7 +51,7 @@ class ArticlesController < ApplicationController
         # format.json { render :show, status: :ok, location: @article }
         format.json { head :no_content }
       else
-        format.html { render :edit }
+        format.html { render action: :edit }
         format.json { render json: @article.errors, status: :unprocessable_entity }
       end
     end
@@ -68,6 +68,12 @@ class ArticlesController < ApplicationController
     end
   end
 
+  def notify_friend
+    @article = Article.find(params[:id])
+    Notifier.email_friend(@article, params[:name], params[:email]).deliver
+    redirect_to @article, :notice => "Successfully sent a message to your friend"
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_article
@@ -76,7 +82,6 @@ class ArticlesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def article_params
-      params.require(:article).permit(:title, :location, :excerpt, :body, :published_at,
-         :category_ids => [])
+      params.require(:article).permit(:title, :location, :excerpt, :body, :published_at, :category_ids => [])
     end
 end
